@@ -12,5 +12,5 @@ data class NasaPodEntity(
     @SerializedName("date")
     val date: String,
     @SerializedName("copyright")
-    val copyright: String
+    val copyright: String,
 )
