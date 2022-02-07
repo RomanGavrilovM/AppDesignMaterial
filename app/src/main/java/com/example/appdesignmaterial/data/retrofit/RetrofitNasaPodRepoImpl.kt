@@ -19,20 +19,16 @@ class RetrofitNasaPodRepoImpl(private val api: NasaPodApi) : NasaPodRepo {
     }
 
     override fun getPictureOfTheDaySync(): NasaPodEntity {
-        return api.getPictureOfTheDay(apiKey).execute().body()
-            ?: throw IllegalStateException("null result")
+        return api.getPictureOfTheDay(apiKey).execute().body() ?: throw IllegalStateException("null result")
     }
 
     override fun getPictureOfTheDayAsync(
         onSuccess: (NasaPodEntity) -> Unit,
-        onError: (Throwable) -> Unit
+        onError: (Throwable) -> Unit,
     ) {
 
         api.getPictureOfTheDay(apiKey).enqueue(object : Callback<NasaPodEntity> {
-            override fun onResponse(
-                call: Call<NasaPodEntity>,
-                response: Response<NasaPodEntity>
-            ) {
+            override fun onResponse(call: Call<NasaPodEntity>, response: Response<NasaPodEntity>) {
                 if (response.isSuccessful) {
                     onSuccess(response.body() ?: throw IllegalStateException("null result"))
                 } else {
