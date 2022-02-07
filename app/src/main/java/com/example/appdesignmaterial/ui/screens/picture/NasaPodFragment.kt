@@ -31,8 +31,8 @@ class NasaPodFragment : Fragment(R.layout.fragment_nasa_pod) {
             binding.podDescriptionBottomSheet.podDescriptionTextView.text =
                 nasaPictureEntity.description
             binding.podDescriptionBottomSheet.podDateTextView.text = nasaPictureEntity.date
-            binding.podDescriptionBottomSheet.podCopyrightTextView.text =
-                "Copyright: ${nasaPictureEntity.copyright}"
+            val copyrightString = "Copyright: ${nasaPictureEntity.copyright}"
+            binding.podDescriptionBottomSheet.podCopyrightTextView.text = copyrightString
         }
 
         viewModel.getData()
