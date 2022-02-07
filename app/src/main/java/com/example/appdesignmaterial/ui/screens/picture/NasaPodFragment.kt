@@ -15,9 +15,7 @@ class NasaPodFragment : Fragment(R.layout.fragment_nasa_pod) {
     private val binding by viewBinding(FragmentNasaPodBinding::bind)
 
     private val viewModel: NasaPodContract.ViewModel by viewModels {
-        NasaPodViewModelFactory(
-            requireContext().app.nasaPodRepo
-        )
+        NasaPodViewModelFactory(requireContext().app.nasaPodRepo)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

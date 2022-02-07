@@ -12,7 +12,7 @@ class NasaPodViewModel(private val nasaPodRepo: NasaPodRepo) :
     override val nasaPodLiveData = MutableLiveData<NasaPodEntity>()
 
     override fun getData() {
-        nasaPodRepo.getPictureOfTheDay(
+        nasaPodRepo.getPictureOfTheDayAsync(
             onSuccess = { nasaPictureEntity ->
                 nasaPodLiveData.postValue(nasaPictureEntity)
             },

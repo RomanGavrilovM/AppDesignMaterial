@@ -8,14 +8,26 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class RetrofitNasaPodRepoImpl(private val api: NasaPodApi) :
-    NasaPodRepo {
+class RetrofitNasaPodRepoImpl(private val api: NasaPodApi) : NasaPodRepo {
 
-    override fun getPictureOfTheDay(
+    private val apiKey by lazy {
+        if (BuildConfig.NASA_API_KEY.isNotBlank()) {
+            BuildConfig.NASA_API_KEY
+        } else {
+            throw IllegalStateException("you need API key")
+        }
+    }
+
+    override fun getPictureOfTheDaySync(): NasaPodEntity {
+        return api.getPictureOfTheDay(apiKey).execute().body()
+            ?: throw IllegalStateException("null result")
+    }
+
+    override fun getPictureOfTheDayAsync(
         onSuccess: (NasaPodEntity) -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        val apiKey = BuildConfig.NASA_API_KEY
+
         api.getPictureOfTheDay(apiKey).enqueue(object : Callback<NasaPodEntity> {
             override fun onResponse(
                 call: Call<NasaPodEntity>,
