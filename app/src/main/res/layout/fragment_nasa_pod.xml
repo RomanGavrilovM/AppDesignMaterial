@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.screens.picture.NasaPictureFragment">
+    tools:context=".ui.screens.picture.NasaPodFragment">
 
     <ImageView
         android:id="@+id/nasa_picture_image_view"

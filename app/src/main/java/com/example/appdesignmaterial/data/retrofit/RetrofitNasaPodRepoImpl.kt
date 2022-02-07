@@ -1,25 +1,25 @@
 package com.example.appdesignmaterial.data.retrofit
 
 import com.example.appdesignmaterial.BuildConfig
-import com.example.appdesignmaterial.domain.entities.NasaPictureEntity
-import com.example.appdesignmaterial.domain.repos.NasaPictureOfTheDayRepo
+import com.example.appdesignmaterial.domain.entities.NasaPodEntity
+import com.example.appdesignmaterial.domain.repos.NasaPodRepo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class NasaPictureOfTheDayRepoImpl(private val api: NasaPictureOfTheDayApi) :
-    NasaPictureOfTheDayRepo {
+class RetrofitNasaPodRepoImpl(private val api: NasaPodApi) :
+    NasaPodRepo {
 
     override fun getPictureOfTheDay(
-        onSuccess: (NasaPictureEntity) -> Unit,
+        onSuccess: (NasaPodEntity) -> Unit,
         onError: (Throwable) -> Unit
     ) {
         val apiKey = BuildConfig.NASA_API_KEY
-        api.getPictureOfTheDay(apiKey).enqueue(object : Callback<NasaPictureEntity> {
+        api.getPictureOfTheDay(apiKey).enqueue(object : Callback<NasaPodEntity> {
             override fun onResponse(
-                call: Call<NasaPictureEntity>,
-                response: Response<NasaPictureEntity>
+                call: Call<NasaPodEntity>,
+                response: Response<NasaPodEntity>
             ) {
                 if (response.isSuccessful) {
                     onSuccess(response.body() ?: throw IllegalStateException("null result"))
@@ -27,7 +27,8 @@ class NasaPictureOfTheDayRepoImpl(private val api: NasaPictureOfTheDayApi) :
                     onError(Throwable("unknown error"))
                 }
             }
-            override fun onFailure(call: Call<NasaPictureEntity>, t: Throwable) {
+
+            override fun onFailure(call: Call<NasaPodEntity>, t: Throwable) {
                 onError(t)
             }
         })
