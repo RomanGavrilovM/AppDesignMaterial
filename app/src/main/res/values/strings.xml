@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AppDesignMaterial</string>
+    <string name="search_wiki">Search Wiki</string>
+    <string name="search_in_wilipedia">Search in wikipedia</string>
 </resources>
