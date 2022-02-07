@@ -27,7 +27,12 @@ class NasaPodFragment : Fragment(R.layout.fragment_nasa_pod) {
     private fun initViewModel() {
         viewModel.nasaPodLiveData.observe(this) { nasaPictureEntity->
             Glide.with(this).load(nasaPictureEntity.url).into(binding.nasaPictureImageView)
-            binding.nasaPictureDescriptionTextView.text = nasaPictureEntity.explanation
+            binding.podDescriptionBottomSheet.podHeaderTextView.text = nasaPictureEntity.title
+            binding.podDescriptionBottomSheet.podDescriptionTextView.text =
+                nasaPictureEntity.description
+            binding.podDescriptionBottomSheet.podDateTextView.text = nasaPictureEntity.date
+            binding.podDescriptionBottomSheet.podCopyrightTextView.text =
+                "Copyright: ${nasaPictureEntity.copyright}"
         }
 
         viewModel.getData()
