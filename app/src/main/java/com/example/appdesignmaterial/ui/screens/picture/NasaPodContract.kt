@@ -7,6 +7,7 @@ class NasaPodContract {
 
     interface ViewModel{
         val nasaPodLiveData: LiveData<NasaPodEntity>
+        val isPodLoadedLiveData: LiveData<Boolean>
 
         fun getData()
     }
