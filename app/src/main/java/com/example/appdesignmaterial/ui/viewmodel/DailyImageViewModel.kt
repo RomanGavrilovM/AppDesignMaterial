@@ -1,16 +1,11 @@
 package com.example.appdesignmaterial.ui.viewmodel
 
-import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import retrofit2.Call
-import retrofit2.Response
+import androidx.lifecycle.*
+import retrofit2.*
 import com.example.appdesignmaterial.BuildConfig
 import com.example.appdesignmaterial.data.retrofit.NasaApiRetrofit
-import com.example.appdesignmaterial.domain.entity.DailyImage
-import com.example.appdesignmaterial.domain.entity.NASAImageResponse as NASAImageResponse
+import com.example.appdesignmaterial.domain.entity.*
 
 class DailyImageViewModel(
     private val liveDataForViewToObserve: MutableLiveData<DailyImage> = MutableLiveData(),
@@ -22,14 +17,22 @@ class DailyImageViewModel(
         return liveDataForViewToObserve
     }
 
-    fun openWiki(word:String): Intent{
-        val intent = Intent(Intent.ACTION_VIEW)
+    fun openUri(word: String): Uri {
         val url = "https://en.wikipedia.org/wiki/${word}"
         val uri = Uri.parse(url)
-        intent.data = uri
-        return  intent
+        return uri
     }
 
+
+    fun sendServerRequest2() {
+        liveDataForViewToObserve.value = DailyImage.Loading(null)
+        val apiKey = BuildConfig.NASA_API_KEY
+        if (apiKey.isBlank()) {
+            DailyImage.Error(Throwable("Нужен API ключ"))
+        } else {
+            executeImageRequest(apiKey)
+        }
+    }
     fun sendServerRequest() {
         liveDataForViewToObserve.value = DailyImage.Loading(null)
         val apiKey = BuildConfig.NASA_API_KEY
@@ -41,8 +44,7 @@ class DailyImageViewModel(
     }
 
     private fun executeImageRequest(apiKey: String) {
-        retrofitImpl.getNasaService()
-            .getImage(apiKey)
+        retrofitImpl.getNasaService().getImage(apiKey)
             .enqueue(object : retrofit2.Callback<NASAImageResponse> {
                 override fun onResponse(
                     call: Call<NASAImageResponse>,

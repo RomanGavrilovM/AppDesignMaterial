@@ -2,6 +2,7 @@ package com.example.appdesignmaterial.ui.fragment
 
 import android.content.*
 import android.os.Bundle
+import android.text.Html
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,14 +13,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.*
-import kotlinx.coroutines.flow.callbackFlow
 import com.example.appdesignmaterial.R
 import com.example.appdesignmaterial.domain.entity.DailyImage
 import com.example.appdesignmaterial.ui.*
 import com.example.appdesignmaterial.ui.viewmodel.DailyImageViewModel
+import java.util.concurrent.atomic.AtomicBoolean
 
 class DailyImageFragment : Fragment() {
-    private val appThemeSaved by lazy { AppThemePreferenceDelegate() }
+    private val appThemeSaved by lazy { AppThemePreferenceDelegate(requireContext()) }
 
     private val viewModel by viewModels<DailyImageViewModel>()
 
@@ -32,7 +33,7 @@ class DailyImageFragment : Fragment() {
     private lateinit var fabAdd: FloatingActionButton
     private lateinit var chipHd: Chip
 
-    private var checkHd: Boolean = true
+    private var  checkHd: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,21 +60,22 @@ class DailyImageFragment : Fragment() {
         chipHd = view.findViewById(R.id.chip_hd)
         val image= viewModel.getImageData().value as DailyImage
         chipHd.setOnClickListener {
-            checkHd = !checkHd
-            viewModel.sendServerRequest()
             renderData(image)
-            //viewModel.getImageData().observe(viewLifecycleOwner, {dailyImage -> renderData(dailyImage)})
+            checkHd = !checkHd
+            // val imageData:DailyImage =  viewModel.getImageData().observe(viewLifecycleOwner, {dailyImage -> renderData(dailyImage)})
         }
 
         fabAdd = view.findViewById(R.id.fab)
         fabAdd.setOnClickListener {
-            val newTheme =appThemeSaved.savedThemeToStyleId(appThemeSaved.getSavedTheme(requireActivity()))
-            appThemeSaved.setSavedTheme(requireActivity(),newTheme)
+            val newTheme =appThemeSaved.savedThemeToStyleId(appThemeSaved.getSavedTheme())
+            appThemeSaved.setSavedTheme(newTheme)
             requireActivity().recreate()
         }
 
         inputLayoutWiki.setEndIconOnClickListener {
-            startActivity(viewModel.openWiki(inputEditTextWiki.text.toString()))
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = viewModel.openUri(inputEditTextWiki.text.toString())
+            startActivity(intent)
         }
 
         startBottomSheetBehavior(view)
@@ -125,6 +127,7 @@ class DailyImageFragment : Fragment() {
                 bottomSheetDescription.text = planation
                 bottomSheetDescriptionHeader.text = planationHead
 
+
                 val url = if (checkHd) {
                     serverResponseData.url
                 } else {
@@ -153,10 +156,10 @@ class DailyImageFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
         when (item.itemId) {
             R.id.app_bar_fav -> Toast.makeText(context, "Favourite", Toast.LENGTH_SHORT).show()
             R.id.app_bar_search -> Toast.makeText(context, "Search", Toast.LENGTH_SHORT).show()
-
             android.R.id.home -> {
                 val activity = requireActivity()
                 BottomNavigationDrawerFragment().show(activity.supportFragmentManager, "tag")
@@ -170,4 +173,6 @@ class DailyImageFragment : Fragment() {
         context.setSupportActionBar(view.findViewById(R.id.bottom_app_bar))
         setHasOptionsMenu(true)
     }
+
+
 }
