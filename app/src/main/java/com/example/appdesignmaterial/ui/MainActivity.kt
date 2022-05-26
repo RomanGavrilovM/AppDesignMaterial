@@ -1,20 +1,30 @@
 package com.example.appdesignmaterial.ui
 
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.os.Bundle
-import by.kirich1409.viewbindingdelegate.viewBinding
-import com.example.appdesignmaterial.ui.screens.picture.NasaPictureFragment
+import androidx.appcompat.app.*
 import com.example.appdesignmaterial.R
-import com.example.appdesignmaterial.databinding.ActivityMainBinding
+import com.example.appdesignmaterial.iu.iu.fragment.UniverseFragment
+import com.example.appdesignmaterial.ui.fragment.DailyImageFragment
 
-class MainActivity : AppCompatActivity(R.layout.activity_main) {
-    private val binding by viewBinding(ActivityMainBinding::bind)
+class MainActivity : AppCompatActivity() {
+
+    private val appThemeSaved by lazy { AppThemePreferenceDelegate(this) }
+
+    @SuppressLint("WrongConstant")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentContainer.id, NasaPictureFragment()).commit()
-        }
+        setTheme(appThemeSaved.getSavedTheme())
+
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val fragment = UniverseFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_daily, fragment)
+        transaction.disallowAddToBackStack()
+        transaction.commit()
     }
+
 }
