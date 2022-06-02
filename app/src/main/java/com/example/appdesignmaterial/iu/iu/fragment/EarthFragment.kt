@@ -7,12 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.api.load
 import com.example.appdesignmaterial.R
+import com.example.appdesignmaterial.databinding.FragmentEarthBinding
 import com.example.appdesignmaterial.domain.entity.EarthImage
 import com.example.appdesignmaterial.iu.iu.viewmodel.EarthViewModel
 
 class EarthFragment : Fragment() {
 
     private val viewModel by viewModels<EarthViewModel>()
+    private lateinit var binding : FragmentEarthBinding
     private lateinit var earthImageView: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +27,8 @@ class EarthFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_earth, container, false)
+        binding = FragmentEarthBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

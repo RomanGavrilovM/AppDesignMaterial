@@ -7,13 +7,15 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.appdesignmaterial.R
+import com.example.appdesignmaterial.databinding.FragmentNasaVideoBinding
 import com.example.appdesignmaterial.domain.entity.NasaVideoSealed
+import com.example.appdesignmaterial.iu.iu.viewmodel.EarthViewModel
 import com.example.appdesignmaterial.iu.iu.viewmodel.NasaVideoViewModel
 
 
 class NasaVideoFragment :Fragment() {
     private val viewModel by viewModels<NasaVideoViewModel>()
+    private lateinit var binding : FragmentNasaVideoBinding
     private lateinit var nasaWebView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +27,8 @@ class NasaVideoFragment :Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_nasa_video, container, false)
+        binding = FragmentNasaVideoBinding.inflate(layoutInflater)
+        return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
