@@ -205,5 +205,4 @@ class DailyImageFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
-
 }
