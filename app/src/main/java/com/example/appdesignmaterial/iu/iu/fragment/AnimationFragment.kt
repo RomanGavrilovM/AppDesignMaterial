@@ -1,13 +1,17 @@
 package com.example.appdesignmaterial.iu.iu.fragment
 
 import android.animation.*
+import android.graphics.Color
 import android.os.Bundle
 import android.transition.*
 import android.view.*
+import android.view.animation.DecelerateInterpolator
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.addListener
 import androidx.core.app.ActivityCompat.recreate
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.example.appdesignmaterial.R
 import com.example.appdesignmaterial.databinding.FragmentAnimationBinding
 import java.util.*
 
@@ -16,6 +20,8 @@ class AnimationFragment : Fragment()
     private lateinit var binding :FragmentAnimationBinding
     private lateinit var  animator: ObjectAnimator
     private lateinit var  animatorValue: ValueAnimator
+    private lateinit var  animatorSet: AnimatorSet
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,17 +30,36 @@ class AnimationFragment : Fragment()
         binding = FragmentAnimationBinding.inflate(layoutInflater)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setTransitionAnimationSamples()
         setObjectAnimatorSample()
         setValueAnimatorSample()
+        binding.valueRgbAnimationSampleButton.setOnClickListener {
+            createArgbAnimator()
+        }
+        setAnimationSetExample()
+        setConstraintExample()
         binding.cancelButton.setOnClickListener {
             try {
+                animatorSet.cancel()
                 animator.cancel()
                 animatorValue.cancel()
             }catch (e:Exception){
+                try {
+                    animator.cancel()
+                    animatorSet.cancel()
+                    animatorValue.cancel()
+                }catch (e:Exception){
+                    try {
+                        animatorValue.cancel()
+                        animator.cancel()
+                        animatorSet.cancel()
+                    }catch (e:Exception){
 
+                    }
+                }
             }
 
         }
@@ -59,6 +84,7 @@ class AnimationFragment : Fragment()
         val transitionSet = TransitionSet()
         transitionSet.duration = 1000
         transitionSet.ordering = TransitionSet.ORDERING_TOGETHER
+
         transitionSet.addTransition(Fade(Fade.OUT))
         transitionSet.addTransition(ChangeBounds())
         transitionSet
@@ -67,10 +93,12 @@ class AnimationFragment : Fragment()
         val transitionSet = TransitionSet()
         transitionSet.duration = 1000
         transitionSet.ordering = TransitionSet.ORDERING_TOGETHER
+
         transitionSet.addTransition(Fade(Fade.IN))
         transitionSet.addTransition(ChangeBounds())
         transitionSet
     }
+
     private fun setObjectAnimatorSample(){
         binding.objectAnimationSampleButton.setOnClickListener {
             animator = ObjectAnimator.ofFloat(binding.textViewAnimation, View.ALPHA,0f,1f)
@@ -100,7 +128,7 @@ class AnimationFragment : Fragment()
 
         animator.repeatMode = ValueAnimator.REVERSE
         animator.repeatCount = ValueAnimator.INFINITE
-
+        animator.interpolator = DecelerateInterpolator()
         animator.addUpdateListener { valueAnimator ->
             val value = valueAnimator.animatedValue as Float
             binding.textViewAnimation.alpha = value
@@ -114,5 +142,48 @@ class AnimationFragment : Fragment()
         )
         return animator
     }
+
+    private  fun createArgbAnimator():ValueAnimator{
+        animatorValue = ValueAnimator.ofArgb(Color.BLUE,Color.RED)
+
+        animatorValue.repeatMode = ValueAnimator.REVERSE
+        animatorValue.repeatCount = ValueAnimator.INFINITE
+        animatorValue.duration = 3_000
+        animatorValue.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Int
+            binding.textViewAnimation.setTextColor(value)
+        }
+
+        animatorValue.addListener(
+            onEnd = {},
+            onStart ={},
+            onRepeat ={},
+            onCancel = {}
+        )
+        animatorValue.start()
+        return animatorValue
+    }
+
+    private fun  setAnimationSetExample(){
+        binding.animatorExampleButton.setOnClickListener {
+            animatorSet = AnimatorSet()
+            val animators = listOf( createArgbAnimator(), createValueAnimator())
+            animatorSet.playTogether(animators)
+            animatorSet.start()
+        }
+    }
+
+    private fun setConstraintExample(){
+        binding.constraintExampleButton.setOnClickListener {
+            TransitionManager.beginDelayedTransition(binding.animationLinearLayout)
+            val constraintSet = ConstraintSet()
+            constraintSet.clone(binding.animationLinearLayout)
+            val parentId = R.id.animation_linear_layout
+            val textViewId =R.id.text_view_animation
+            constraintSet.connect(textViewId, ConstraintSet.BOTTOM, parentId, ConstraintSet.BOTTOM)
+            constraintSet.applyTo(binding.animationLinearLayout)
+        }
+    }
+
 
 }
