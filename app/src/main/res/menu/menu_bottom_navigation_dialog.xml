@@ -4,14 +4,20 @@
         <item
             android:id="@+id/navigation_one"
             android:icon="@drawable/ic_archive"
-            android:title="На экран 1" />
+            android:title="Солнечная система-Collapsing Toolbar" />
         <item
             android:id="@+id/navigation_two"
             android:icon="@drawable/ic_baseline_send_24"
-            android:title="На экран 2" />
+            android:title="Анимация-Motion Layout" />
+
         <item
             android:id="@+id/navigation_three"
             android:icon="@drawable/ic_baseline_add_circle_outline_24"
             android:title="Animation" />
+
+        <item
+            android:id="@+id/navigation_four"
+            android:icon="@drawable/ic_baseline_send_24"
+            android:title="RecyclerView" />
     </group>
 </menu>
