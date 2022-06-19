@@ -110,4 +110,9 @@
     <color name="light_blue">#0088FF</color>
     <color name="dark_red_night">#240200</color>
     <color name="light_blue_night">#000433</color>
+
+    <style name="Theme.AppMaterialDesign.OldSplash">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+
+    </style>
 </resources>
